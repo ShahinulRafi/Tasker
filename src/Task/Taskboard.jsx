@@ -1,10 +1,27 @@
+import { useState } from "react";
+import AddTaskModal from "./AddTaskModal";
 import Search from "./Search";
 import TaskActions from "./TaskActions";
 import TaskList from "./TaskList";
 
 export default function Taskboard() {
+  const defaultTask = {
+    id: crypto.randomUUID(), //create random id from JS
+    title: "Learn React",
+    description:
+      "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    tags: ["react", "javascript", "frontend"],
+    priority: "high",
+    isFavorite: false,
+  };
+  const [tasks, setTasks] = useState([defaultTask]); //Create a default task, helps to test
+  const [showAddModal, setShowAddModal] = useState(false);
+  function handleAddTask() {
+    console.log("Adding a task");
+  }
   return (
     <section className="mb-20" id="tasks">
+      {showAddModal && <AddTaskModal />}
       <div className="container">
         {/* Search Box */}
         <div className="p-2 flex justify-end">
@@ -12,8 +29,8 @@ export default function Taskboard() {
         </div>
         {/* Search Box Ends */}
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
-          <TaskActions />
-          <TaskList />
+          <TaskActions onAddClick={() => setShowAddModal(true)} />
+          <TaskList tasks={tasks} />
         </div>
       </div>
     </section>
