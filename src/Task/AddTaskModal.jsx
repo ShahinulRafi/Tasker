@@ -1,14 +1,16 @@
 import {useState} from "react";
 
-export default function AddTaskModal({onSave}) {
-  const [task, setTask] = useState({
+export default function AddTaskModal({onSave, taskToUpdate, onCloseClick}) {
+  const [task, setTask] = useState(taskToUpdate || {
     id: crypto.randomUUID(),
     title: "",
     description: "",
     tags: [],
     priority: "",
     isFavorite: false,
-  })
+  });
+
+  const [isAdd, setIsAdd] = useState(Object.is(taskToUpdate, null)); // taskToUpdate null hole true hoye jabe
   const handleChange = (e) => {
     const name = e.target.name;
     let value = e.target.value;
@@ -25,7 +27,7 @@ export default function AddTaskModal({onSave}) {
       <div className="bg-black opacity-70 h-full w-full z-10 absolute top-0 left-0"></div>
       <htmlForm className="mx-auto my-10 w-full max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11 z-10 absolute top-1/4 left-1/3">
         <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]">
-          Add New Task
+          { isAdd ? "Add New Task" : "Edit Task"}
         </h2>
 
         {/* <!-- inputs --> */}
@@ -91,17 +93,23 @@ export default function AddTaskModal({onSave}) {
           </div>
         </div>
         {/* <!-- inputs ends --> */}
-        <div className="mt-16 flex justify-center lg:mt-20">
+        <div className="mt-16 flex justify-between lg:mt-20">
           <button
             type="submit"
             className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
-            onClickCapture={() => 
+            onClick={() => 
               {
                 // console.log(task);
-                onSave(task);
+                onSave(task, isAdd);
               }}
           >
             Save
+          </button>
+          <button
+            className="rounded bg-red-600 px-4 py-2 text-white transition-all hover:opacity-80"
+            onClick={onCloseClick}
+          >
+            Close
           </button>
         </div>
       </htmlForm>
