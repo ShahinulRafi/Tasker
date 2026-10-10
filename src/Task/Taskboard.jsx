@@ -16,12 +16,14 @@ export default function Taskboard() {
   };
   const [tasks, setTasks] = useState([defaultTask]); //Create a default task, helps to test
   const [showAddModal, setShowAddModal] = useState(false);
-  function handleAddTask() {
-    console.log("Adding a task");
+  function handleAddTask(newTask) {
+    console.log("Adding a task..", newTask);
+    setTasks([...tasks, newTask]);
+    setShowAddModal(false);
   }
   return (
     <section className="mb-20" id="tasks">
-      {showAddModal && <AddTaskModal />}
+      {showAddModal && <AddTaskModal onSave={handleAddTask}/>}
       <div className="container">
         {/* Search Box */}
         <div className="p-2 flex justify-end">
