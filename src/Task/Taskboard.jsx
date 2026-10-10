@@ -3,6 +3,7 @@ import AddTaskModal from "./AddTaskModal";
 import Search from "./Search";
 import TaskActions from "./TaskActions";
 import TaskList from "./TaskList";
+import NoTaskFound from "./NoTaskFound";
 
 export default function Taskboard() {
   const defaultTask = {
@@ -61,6 +62,16 @@ export default function Taskboard() {
 
     setTasks(newTasks);
   }
+  function handleSearch(searchTerm){
+    console.log(searchTerm);
+
+    const filtered = tasks.filter((task) =>  
+      task.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+
+    setTasks([...filtered]);
+
+  }
   return (
     <section className="mb-20" id="tasks">
       {showAddModal && (
@@ -69,19 +80,24 @@ export default function Taskboard() {
       <div className="container">
         {/* Search Box */}
         <div className="p-2 flex justify-end">
-          <Search />
+          <Search onSearch={handleSearch}/>
         </div>
         {/* Search Box Ends */}
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
           <TaskActions onAddClick={() => setShowAddModal(true)} 
             onDeleteAllClick={handleDeleteAllClick}
             />
-          <TaskList 
+          {
+            tasks.length > 0 ?
+            (<TaskList 
           tasks={tasks} 
           onEdit={handleEditTask} 
           onDelete={handleDeleteTask}
           onFavorite={handleFavorite}
-          />
+          />)
+          :
+          (<NoTaskFound />)
+          }
         </div>
       </div>
     </section>
